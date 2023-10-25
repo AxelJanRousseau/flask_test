@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <form action="/story" method="post">
+        prompt: <input type = "text" name = "fname" />
+        outptu: 
+
+    </form> -->
+
+    <form id="async_form" action="javascript:void(0);" onsubmit="myFunction()"> 
+        <!-- form action="javascript:;" onsubmit="myFunction(this)" -->
+        Story prompt: <input type = "text" name = "prompt" id="sprompt"/>
+        <!-- <button type="button" onclick="myFunction()">Click Me!</button> -->
+        <button type="submit">Submit</button>
+        <button type="button" onclick="clearFields()" id="clear_button">clear</button>
+
+        <p id="output">This is a demonstration.</p>
+    </form>
+
+    
+
+    
+
+<script>
+    // async_form.onsubmit = myFunction
+    function clearFields() {
+        sprompt.value='';
+        output.innerHTML = '';
+    }
+
+    async function myFunction() {
+        const form = document.getElementById("async_form");
+        const formData = new FormData(form);
+        document.getElementById("output").innerHTML = "Je verhaaltje wordt geschreven";
+        var response_text = '';
+        await fetch('/story',{method: "POST",
+                body:formData})
+            .then((response) => response.text())
+            .then((text) => response_text = text);
+        document.getElementById("output").innerHTML = response_text;
+    }
+</script>
+    
+</body>
+</html>
