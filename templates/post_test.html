@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- To use external css file with flask templating, place file in /static directory
+    and use href= "{{ url_for('static',filename='styles/mainpage.css') }}"-->
+    <style>
+        body {
+          background-color: linen;
+        }
+        
+        p {
+            text-align: center;
+            /* color: blue; */
+        }
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        </style>
 </head>
 <body>
     <!-- <form action="/story" method="post">
@@ -14,11 +31,11 @@
 
     <form id="async_form" action="javascript:void(0);" onsubmit="myFunction()"> 
         <!-- form action="javascript:;" onsubmit="myFunction(this)" -->
-        Story prompt: <input type = "text" name = "prompt" id="sprompt"/>
+        Geef een korte beschrijving van jezelf: <input type = "text" name = "prompt" id="sprompt"/>
         <!-- <button type="button" onclick="myFunction()">Click Me!</button> -->
         <button type="submit">Submit</button>
         <button type="button" onclick="clearFields()" id="clear_button">clear</button>
-        <img id="image" src="https://www.w3schools.com/images/w3schools_green.jpg" >
+        <img id="image" class="center" src="https://www.uhasselt.be/media/kzfjh2ll/50-jaar-uhasselt.png" width="256" height="256">
         <p id="output">This is a demonstration.</p>
     </form>
 
@@ -31,7 +48,7 @@
     function clearFields() {
         sprompt.value='';
         output.innerHTML = '';
-        document.getElementById("image").src="";
+        document.getElementById("image").src="https://www.uhasselt.be/media/kzfjh2ll/50-jaar-uhasselt.png";
     }
 
     async function myFunction() {
