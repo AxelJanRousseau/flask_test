@@ -18,7 +18,7 @@
         <!-- <button type="button" onclick="myFunction()">Click Me!</button> -->
         <button type="submit">Submit</button>
         <button type="button" onclick="clearFields()" id="clear_button">clear</button>
-
+        <img id="image" src="https://www.w3schools.com/images/w3schools_green.jpg" >
         <p id="output">This is a demonstration.</p>
     </form>
 
@@ -31,18 +31,20 @@
     function clearFields() {
         sprompt.value='';
         output.innerHTML = '';
+        document.getElementById("image").src="";
     }
 
     async function myFunction() {
         const form = document.getElementById("async_form");
         const formData = new FormData(form);
         document.getElementById("output").innerHTML = "Je verhaaltje wordt geschreven";
-        var response_text = '';
+        var out = '';
         await fetch('/story',{method: "POST",
                 body:formData})
-            .then((response) => response.text())
-            .then((text) => response_text = text);
-        document.getElementById("output").innerHTML = response_text;
+            .then((response) => response.json())
+            .then((json) => out = json);
+        document.getElementById("output").innerHTML = out['story'];
+        document.getElementById("image").src = out['img'];
     }
 </script>
     

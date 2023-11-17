@@ -4,6 +4,7 @@ import flask
 from time import sleep
 import random
 import openai
+from openai import OpenAI
 
 import os
 from dotenv import load_dotenv
@@ -13,6 +14,7 @@ load_dotenv()
 SYSTEM_PROMPT ="Jij ben een schrijver van kinderverhaaltjes. Je krijgt een beschrijving van kindje en schrijft een gepersonaliseerd verhaaltje over hun avonturen op de wetenschapsbeurs."
 app = Flask(__name__)
 
+client = OpenAI()
 
 data = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 def generate(data):
@@ -46,20 +48,38 @@ def start():
     return render_template('post_test.html')
 
 def get_story(prompt: str) -> str:
-    completion = openai.ChatCompletion.create(model="gpt-3.5-turbo",
+    completion = client.chat.completions.create(model="gpt-3.5-turbo",
                                               temperature=1.,
                                               stream=False,
                                               messages=[{"role": "system", "content": SYSTEM_PROMPT},
                                                         {"role": "user", "content": prompt}])
     return (completion.choices[0].message.content)
 
+def get_image_from_prompt(story:str):
+    print("generating image")
+    # Dali-2 is limited to 1000 chars as prompt. use first 1000 to generate the image
+    story=story[:1000]
+    response = client.images.generate(
+    model="dall-e-2",
+    prompt=story,
+    size="256x256",
+    quality="standard",
+    n=1,
+    )
+
+    image_url = response.data[0].url
+    return image_url
 
 @app.post('/story')
 def get_story_promt():
     print('generating story')
     prompt = request.form['prompt']
     story=get_story(prompt)
-    return story
+    img_url = get_image_from_prompt(story)
+    #debug:
+    # story=data
+    # img_url="https://www.w3schools.com/images/w3schools_green.jpg"
+    return {"story":story, "img":img_url}
 
 if __name__ == '__main__':
     app.debug = True
