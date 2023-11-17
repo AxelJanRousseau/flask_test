@@ -5,6 +5,6 @@ I am aware this code is janky, and a flask server is overkill / not needed for t
 
 ## Instructions:
 1. Download code
-2. Install Python and dependencies: pip install --upgrade Flask openai
+2. Install Python and dependencies: ```pip install --upgrade Flask openai python-dotenv```
 3. create .env file containing your API key: ```OPENAI_API_KEY="your_key_here"```
 4. Run ```flask --app main.py run ``` and navigate to http://127.0.0.1:5000/
